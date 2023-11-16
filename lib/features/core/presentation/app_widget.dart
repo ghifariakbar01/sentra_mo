@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../constants/strings.dart';
-import '../../../l10n/l10n.dart';
+
 import '../../../style/style.dart';
 import '../../auth/shared/providers.dart';
 
@@ -36,8 +36,6 @@ class AppWidget extends HookConsumerWidget {
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
       title: Strings.appName,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
       theme: Themes.lightTheme(context),
       darkTheme: Themes.darkTheme(context),
       themeMode: ThemeMode.light,

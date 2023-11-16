@@ -20,11 +20,14 @@ class AuthRemoteService {
   }) async {
     try {
       final response = await http.post(
-          Uri.parse('${BuildConfig.get().baseUrl}/v-care/?mod=auth&a=signin'),
+          Uri.parse('${BuildConfig.get().baseUrl}?mod=auth&a=signin'),
           body: {
+            '_action_': 'Login',
             'user_id': userId,
             'password': password,
           });
+
+      debugger();
 
       log('response.body ${response.body}');
 
@@ -62,9 +65,8 @@ class AuthRemoteService {
       {required String token, required Map<String, String> headers}) async {
     try {
       final response = await http.post(
-          Uri.parse(
-              '${BuildConfig.get().baseUrl}/v-care/?mod=auth&a=signin_token'),
-          body: {'token': token},
+          Uri.parse('${BuildConfig.get().baseUrl}?mod=auth&a=signin_token'),
+          body: {'_action_': 'LoginToken', 'token': token},
           headers: headers);
 
       final responseLogin = jsonDecode(response.body) as Map<String, dynamic>;

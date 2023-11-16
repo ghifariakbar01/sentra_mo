@@ -33,31 +33,31 @@ class VersioningWidget extends ConsumerWidget {
                 ),
             error: (error, stack) => Text('error $error $stack'),
             loading: Container.new),
-        FutureBuilder<String>(
-          future: getGitInfo(),
-          builder: (context, snapshot) {
-            return Center(
-              child: Text(
-                snapshot.data ?? '',
-                style: Themes.custom(
-                    color: color ?? const Color(0xff999999),
-                    fontWeight: FontWeight.normal,
-                    fontSize: gitFontSize ?? 15),
-                textAlign: TextAlign.center,
-              ),
-            );
-          },
-        )
+        // FutureBuilder<String>(
+        //   future: getGitInfo(),
+        //   builder: (context, snapshot) {
+        //     return Center(
+        //       child: Text(
+        //         snapshot.data ?? '',
+        //         style: Themes.custom(
+        //             color: color ?? const Color(0xff999999),
+        //             fontWeight: FontWeight.normal,
+        //             fontSize: gitFontSize ?? 15),
+        //         textAlign: TextAlign.center,
+        //       ),
+        //     );
+        //   },
+        // )
       ],
     );
   }
 
-  Future<String> getGitInfo() async {
-    final head = await rootBundle.loadString('.git/HEAD');
-    final commitId = await rootBundle.loadString('.git/ORIG_HEAD');
+  // Future<String> getGitInfo() async {
+  //   final head = await rootBundle.loadString('.git/HEAD');
+  //   final commitId = await rootBundle.loadString('.git/ORIG_HEAD');
 
-    final branch = head.split('/').last;
+  //   final branch = head.split('/').last;
 
-    return commitId.substring(0, 7);
-  }
+  //   return commitId.substring(0, 7);
+  // }
 }

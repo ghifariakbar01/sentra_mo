@@ -5,7 +5,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../constants/assets.dart';
-import '../../../../l10n/l10n.dart';
+
 import '../../../../style/style.dart';
 import '../../shared/providers.dart';
 import 'sign_in_form.dart';
@@ -17,15 +17,13 @@ class SignInScaffold extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final isBlacklist = ref.watch(blacklistNotifierProvider);
-
     // log('isBlacklist $isBlacklist');
-    final l10n = context.l10n;
 
     return KeyboardDismissOnTap(
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            l10n.signIn,
+            'Sign In',
             style: Themes.custom(fontSize: 20),
           ),
           elevation: 1,

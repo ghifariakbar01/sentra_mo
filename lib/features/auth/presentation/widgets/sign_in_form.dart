@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../l10n/l10n.dart';
 import '../../../../style/style.dart';
 import '../../shared/providers.dart';
 
@@ -10,7 +9,6 @@ class SignInForm extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
     final showErrorMessages = ref.watch(
       signInFormNotifierProvider.select((state) => state.showErrorMessages),
     );
@@ -31,8 +29,8 @@ class SignInForm extends HookConsumerWidget {
             validator: (_) =>
                 ref.read(signInFormNotifierProvider).userId.value.fold(
                       (f) => f.maybeMap(
-                        invalidEmail: (_) => l10n.validEmailVerificationText,
-                        empty: (_) => l10n.emptyStringVerificationText,
+                        invalidEmail: (_) => 'Invalid Email',
+                        empty: (_) => 'Empty',
                         orElse: () => null,
                       ),
                       (_) => null,
@@ -46,17 +44,14 @@ class SignInForm extends HookConsumerWidget {
             onChanged: (value) => ref
                 .read(signInFormNotifierProvider.notifier)
                 .changePassword(value),
-            validator: (_) => ref
-                .read(signInFormNotifierProvider)
-                .password
-                .value
-                .fold(
-                  (f) => f.maybeMap(
-                    shortPassword: (_) => l10n.shortPasswordVerificationText,
-                    orElse: () => null,
-                  ),
-                  (_) => null,
-                ),
+            validator: (_) =>
+                ref.read(signInFormNotifierProvider).password.value.fold(
+                      (f) => f.maybeMap(
+                        shortPassword: (_) => 'Password Short',
+                        orElse: () => null,
+                      ),
+                      (_) => null,
+                    ),
           ),
         ],
       ),

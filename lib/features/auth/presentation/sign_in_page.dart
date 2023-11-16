@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../l10n/l10n.dart';
 import '../../core/presentation/widgets/alert_helper.dart';
 import '../../core/presentation/widgets/loading_overlay.dart';
 
@@ -15,8 +14,6 @@ class SignInPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-
     ref.listen<Option<Either<AuthFailure, Unit>>>(
       signInFormNotifierProvider.select(
         (state) => state.failureOrSuccessOption,
@@ -27,9 +24,9 @@ class SignInPage extends HookConsumerWidget {
             (failure) => AlertHelper.showSnackBar(
                   context,
                   message: failure.map(
-                    storage: (_) => l10n.storageError,
-                    server: (value) => value.message ?? l10n.serverError,
-                    noConnection: (_) => l10n.noConnectionError,
+                    storage: (_) => 'Error Storage',
+                    server: (value) => value.message ?? 'Error Server',
+                    noConnection: (_) => 'No Connection',
                   ),
                 ), (_) async {
           await ref
