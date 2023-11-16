@@ -1,0 +1,27 @@
+{
+  "appTitle": "Project Template",
+  "storageError": "Ups, terjadi kesalahan saat akses ke penyimpanan lokal.",
+  "home": "Beranda",
+  "noConnectionError": "Sambungan jaringan lambat atau sedang tidak tersedia. Silakan periksa pengaturan internet anda.",
+  "password": "Kata sandi",
+  "serverError": "Terjadi kesalahan server. Silakan coba lagi nanti.",
+  "shortPasswordVerificationText": "Kata sandi harus memiliki minimal 4 karakter",
+  "signIn": "Masuk Vanera Clinic",
+  "signInStatusError": "Gagal saat mendapatkan status sign in",
+  "signOut": "Keluar",
+  "validEmailVerificationText": "Harap masukkan alamat email yang valid",
+  "emptyStringVerificationText": "Bagian ini tidak boleh kosong",
+  "validNomorIdentitasVerificationText": "Harap masukkan nomor identitas yang valid",
+  "validDateVerificationText": "Harap masukkan tanggal yang valid",
+  "validMonthVerificationText": "Harap masukkan bulan yang valid",
+  "validYearVerificationText": "Harap masukkan tahun yang valid",
+  "validPhoneVerificationText": "Harap masukkan nomor yang valid",
+  "validPhotoVerificationText": "Harap masukkan foto",
+  "validNotesVerificationText": "Harap masukkan catatan yang valid",
+  "welcomeUser": "Selamat datang {userName}",
+  "@welcomeUser": {
+    "placeholders": {
+      "userName": {}
+    }
+  }
+}

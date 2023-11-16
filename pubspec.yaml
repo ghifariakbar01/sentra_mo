@@ -1,0 +1,93 @@
+name: flutter_project_template_riverpod
+description: A new Flutter project.
+
+# Prevent accidental publishing to pub.dev.
+publish_to: "none"
+
+version: 1.0.0+10
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+
+  #* UI
+  cached_network_image: ^3.2.2
+  flash: ^3.0.5+1
+  flutter_keyboard_visibility: ^5.4.0
+  google_fonts: ^5.1.0
+  photo_view: ^0.14.0
+
+  #* Network
+  http: ^1.0.0
+  http_interceptor: ^2.0.0-beta.7
+
+  #* Dart data class
+  freezed_annotation: ^2.2.0
+  json_annotation: ^4.7.0
+
+  #* State management
+  hooks_riverpod: ^2.1.0
+  riverpod: ^2.4.3
+  riverpod_annotation: ^2.2.0
+
+  #* Logging
+  logging: ^1.1.0
+
+  #* Routing
+  go_router: ^6.0.2
+
+  #* Persistent storage
+  flutter_secure_storage: ^9.0.0
+
+  #* Localization
+  intl: ^0.18.0
+
+  #* Date Time util
+  # jiffy: ^5.0.0
+
+  #* IO process
+  image_cropper: ^5.0.0
+  image_picker: ^1.0.4
+  path_provider: ^2.1.1
+  printing: ^5.11.0
+
+  #* Misc
+  currency_text_input_formatter: ^2.1.10
+  collection: ^1.17.2
+  dartz: ^0.10.1
+  package_info_plus: ^4.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  #* Code generators
+  build_runner: ^2.3.2
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.2.13
+  freezed: ^2.2.1
+  json_serializable: ^6.5.4
+  riverpod_generator: ^2.3.3
+
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # Enable generation of localized Strings from arb files.
+  generate: true
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
+    - .git/HEAD # This file points out the current branch of the project.
+    - .git/ORIG_HEAD # This file points to the commit id at origin (last commit id of the remote repository).
+    - .git/refs/heads/ # This directory includes files for each branch that points to the last commit id (local repo).
