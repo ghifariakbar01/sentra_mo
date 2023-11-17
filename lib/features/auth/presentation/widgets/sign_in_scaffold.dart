@@ -29,35 +29,36 @@ class SignInScaffold extends HookConsumerWidget {
           elevation: 1,
         ),
         backgroundColor: Palette.primaryColor,
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Stack(
-            children: [
-              Container(
+        body: Stack(
+          children: [
+            // Image.asset()
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: Colors.white),
                 padding: const EdgeInsets.all(16),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 50, child: Image.asset(Assets.appLogo2)),
+                    Text(
+                      'Masuk ke Akun Sentra Teknik',
+                      style: Themes.custom(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Palette.primaryColor),
+                    ),
+                    Text(
+                      'Cek Inventoris Sentra Teknik dengan Sentra Teknik Mobile !',
+                      style: Themes.custom(
+                          fontSize: 10,
+                          fontWeight: FontWeight.normal,
+                          color: Palette.primaryColor),
+                    ),
                     const SizedBox(height: 24),
                     const SignInForm(),
-                    const SizedBox(height: 8),
-                    // isBlacklist.maybeWhen(
-                    //     blackList: () {
-                    //       return Row(
-                    //         children: [
-                    //           Text(
-                    //             'Token diblacklist.',
-                    //             style: Themes.custom(
-                    //                 color: Colors.red, fontSize: 12),
-                    //           ),
-                    //         ],
-                    //       );
-                    //     },
-                    //     orElse: Container.new),
                     const SizedBox(height: 8),
                     Container(
                       height: 50,
@@ -85,18 +86,18 @@ class SignInScaffold extends HookConsumerWidget {
                   ],
                 ),
               ),
-              const Positioned(
-                bottom: 5,
-                left: 0,
-                right: 0,
-                child: VersioningWidget(
-                  color: Palette.secondaryTextColor,
-                  fontSize: 10,
-                  gitFontSize: 8,
-                ),
-              )
-            ],
-          ),
+            ),
+            const Positioned(
+              bottom: 5,
+              left: 0,
+              right: 0,
+              child: VersioningWidget(
+                color: Palette.secondaryTextColor,
+                fontSize: 10,
+                gitFontSize: 8,
+              ),
+            )
+          ],
         ),
       ),
     );
