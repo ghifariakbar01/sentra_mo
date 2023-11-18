@@ -40,6 +40,7 @@ class ExpiredTokenInterceptor extends RetryPolicy {
       final tokenEither = await repository.refreshToken(headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bearer $token',
+        'Connection': 'keep-alive',
       });
 
       // Get newly saved access token

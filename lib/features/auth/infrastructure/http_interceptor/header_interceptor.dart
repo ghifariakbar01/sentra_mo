@@ -19,6 +19,7 @@ class HeaderInterceptor implements InterceptorContract {
       request.headers.addAll({
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bearer $token',
+        'Connection': 'keep-alive',
       });
     } catch (e) {
       log('HEADER INTERCEPTOR: $e');
