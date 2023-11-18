@@ -8,6 +8,7 @@ import 'package:http_interceptor/http/intercepted_client.dart';
 import '../../../../config/configuration.dart';
 
 import '../../core/infrastructure/exceptions.dart';
+import '../application/stock.dart';
 
 class StockRemoteService {
   StockRemoteService(
@@ -16,54 +17,52 @@ class StockRemoteService {
 
   final InterceptedClient _httpClient;
 
-  // Future<List<PatientDataState>> getPatients(int pageNumber) async {
-  //   try {
-  //     final response = await _httpClient.get(
-  //       Uri.parse(
-  //           '${BuildConfig.get().baseUrl}v-care/?mod=pasien&a=list&sq=&so=&pn=$pageNumber'),
-  //     );
+  Future<List<StockItem>> getStocks({
+    required int pageNumber,
+    required String search,
+  }) async {
+    try {
+      final response = await _httpClient.get(
+        Uri.parse(
+            '${BuildConfig.get().baseUrl}?mod=item&a=list&sq=$search&pn=$pageNumber'),
+      );
 
-  //     log('url ${'${BuildConfig.get().baseUrl}v-care/?mod=pasien&a=list&sq=&so=&pn=$pageNumber'}');
+      log('url ${BuildConfig.get().baseUrl}?mod=item&a=list&sq=$search&pn=$pageNumber');
 
-  //     final responsePatients =
-  //         jsonDecode(response.body) as Map<String, dynamic>;
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
 
-  //     log('response.patients ${responsePatients}');
+      log('response data $data');
 
-  //     if (response.statusCode == 200 && responsePatients['data'] != null) {
-  //       final resultSet = <PatientDataState>[];
+      if (response.statusCode == 200 && data['data'] != null) {
+        final resultSet = <StockItem>[];
 
-  //       if (responsePatients['data']['result_set'] != null) {
-  //         final list = responsePatients['data']['result_set'] as List<dynamic>;
+        if (data['data']['result_set'] != null) {
+          final list = data['data']['result_set'] as List<dynamic>;
 
-  //         if (list.isNotEmpty) {
-  //           for (final data in list) {
-  //             resultSet
-  //                 .add(PatientDataState.fromJson(data as Map<String, dynamic>));
-  //           }
+          if (list.isNotEmpty) {
+            for (final data in list) {
+              resultSet.add(StockItem.fromJson(data as Map<String, dynamic>));
+            }
 
-  //           return resultSet;
-  //         }
-  //       }
+            return resultSet;
+          }
+        }
 
-  //       return resultSet;
-  //     }
+        return resultSet;
+      }
 
-  //     final responseCode = responsePatients['code'] as String;
-  //     final responseCodeInt = int.parse(responseCode);
-  //     final responseMessage = responsePatients['message'] as String;
+      final code = int.parse(data['code'] as String);
+      final message = data['message'] as String;
 
-  //     log('response.body 2  $responseCode $responseCodeInt $responseMessage');
+      debugger(message: 'called');
 
-  //     debugger(message: 'called');
-
-  //     throw RestApiException(responseCodeInt, responseMessage);
-  //   } on FormatException {
-  //     throw const FormatException();
-  //   } on NoConnectionException {
-  //     throw NoConnectionException();
-  //   } on RestApiException catch (e) {
-  //     throw RestApiException(e.errorCode, e.message);
-  //   }
-  // }
+      throw 'Server Error Code : $code Message : $message ';
+    } on NoConnectionException {
+      throw 'No Connection ';
+    } on FormatException catch (e) {
+      throw 'Format Error $e ';
+    } on RestApiException catch (e) {
+      throw 'Server Error ${e.message}';
+    }
+  }
 }

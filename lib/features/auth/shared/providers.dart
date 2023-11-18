@@ -12,7 +12,6 @@ import '../application/token/token_notifier.dart';
 import '../infrastructure/auth_remote_service.dart';
 import '../infrastructure/auth_repository.dart';
 import '../infrastructure/blacklist/blacklist_repository.dart';
-import '../infrastructure/blacklist/blacklist_state.dart';
 import '../infrastructure/blacklist/blacklist_storage.dart';
 import '../infrastructure/credentials_storage/credentials_storage.dart';
 import '../infrastructure/credentials_storage/refresh_credentials_refresh_storage.dart';

@@ -14,6 +14,7 @@ import '../../../home/presentation/home_page.dart';
 
 import '../../../home/presentation/version_page.dart';
 
+import '../../../stock/presentation/stock_screen.dart';
 import 'route_names.dart';
 
 class RouterNotifier extends ChangeNotifier {
@@ -58,7 +59,7 @@ class RouterNotifier extends ChangeNotifier {
       GoRoute(
         name: RouteNames.homeNameRoute,
         path: RouteNames.homeRoute,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => const StockScreen(),
         routes: [
           GoRoute(
               name: RouteNames.versionlNameRoute,
