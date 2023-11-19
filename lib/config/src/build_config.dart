@@ -22,7 +22,7 @@ class BuildConfig {
 
   const BuildConfig._staging()
       : this._(
-          baseUrl: 'https://vc.vaneraclinic.com/',
+          baseUrl: 'https://dev.sentrateknik.com/sentra-mo/',
           socketUrl: '',
           connectTimeout: 20000,
           receiveTimeout: 20000,
@@ -31,7 +31,7 @@ class BuildConfig {
 
   const BuildConfig._release()
       : this._(
-          baseUrl: 'https://vc.vaneraclinic.com/',
+          baseUrl: 'https://dev.sentrateknik.com/sentra-mo/',
           socketUrl: '',
           connectTimeout: 20000,
           receiveTimeout: 20000,

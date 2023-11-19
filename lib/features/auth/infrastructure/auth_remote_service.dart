@@ -27,7 +27,7 @@ class AuthRemoteService {
             'password': password,
           });
 
-      debugger();
+      // debugger();
 
       log('response.body ${response.body}');
 

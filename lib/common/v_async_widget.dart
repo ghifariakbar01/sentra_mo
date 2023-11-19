@@ -20,9 +20,13 @@ class AsyncValueWidget<T> extends StatelessWidget {
 
 class VAsyncWidgetScaffold<T> extends StatelessWidget {
   const VAsyncWidgetScaffold(
-      {super.key, required this.value, required this.data});
+      {super.key,
+      required this.value,
+      required this.data,
+      required this.appBar});
   final AsyncValue<T> value;
   final Widget Function(T) data;
+  final PreferredSizeWidget appBar;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class VAsyncWidgetScaffold<T> extends StatelessWidget {
         body: Center(child: ErrorMessageWidget(e.toString())),
       ),
       loading: () => Scaffold(
-        appBar: AppBar(),
+        appBar: appBar,
         body: const Center(child: CircularProgressIndicator()),
       ),
     );

@@ -8,7 +8,7 @@ import 'package:http_interceptor/http/intercepted_client.dart';
 import '../../../../config/configuration.dart';
 
 import '../../core/infrastructure/exceptions.dart';
-import '../application/stock.dart';
+import '../application/stock_data.dart';
 
 class StockRemoteService {
   StockRemoteService(
@@ -17,7 +17,7 @@ class StockRemoteService {
 
   final InterceptedClient _httpClient;
 
-  Future<List<StockItem>> getStocks({
+  Future<StockData> getStocks({
     required int pageNumber,
     required String search,
   }) async {
@@ -31,24 +31,10 @@ class StockRemoteService {
 
       final data = jsonDecode(response.body) as Map<String, dynamic>;
 
-      log('response data $data');
+      // log('response data $data');
 
       if (response.statusCode == 200 && data['data'] != null) {
-        final resultSet = <StockItem>[];
-
-        if (data['data']['result_set'] != null) {
-          final list = data['data']['result_set'] as List<dynamic>;
-
-          if (list.isNotEmpty) {
-            for (final data in list) {
-              resultSet.add(StockItem.fromJson(data as Map<String, dynamic>));
-            }
-
-            return resultSet;
-          }
-        }
-
-        return resultSet;
+        return StockData.fromJson(data['data'] as Map<String, dynamic>);
       }
 
       final code = int.parse(data['code'] as String);

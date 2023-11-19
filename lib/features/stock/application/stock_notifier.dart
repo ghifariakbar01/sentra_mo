@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -6,8 +8,17 @@ import '../../auth/infrastructure/http_interceptor/http_interceptor_provider.dar
 import '../infrastructure/stock_remote_service.dart';
 import '../infrastructure/stock_repository.dart';
 import 'stock.dart';
+import 'stock_data.dart';
 
 part 'stock_notifier.g.dart';
+
+final isSearchingProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
+final searchPageProvider = StateProvider<int>((ref) {
+  return 1;
+});
 
 final searchControllerProvider = StateProvider<TextEditingController>((ref) {
   return TextEditingController(text: 'Shimizu');
@@ -31,8 +42,12 @@ StockRepository stockRepository(StockRepositoryRef ref) {
 
 @riverpod
 class StockNotifier extends _$StockNotifier {
+  bool canLoadMore() =>
+      int.parse(state.requireValue.paging.pageNo) <=
+      state.requireValue.paging.pageSize;
+
   @override
-  FutureOr<List<StockItem>> build() async {
+  FutureOr<StockData> build() async {
     return ref
         .read(stockRepositoryProvider)
         .getStocks(pageNumber: 1, search: 'Shimizu');
@@ -46,5 +61,27 @@ class StockNotifier extends _$StockNotifier {
     state = await AsyncValue.guard(() => ref
         .read(stockRepositoryProvider)
         .getStocks(pageNumber: 1, search: search));
+  }
+
+  Future<void> loadMore({
+    required int page,
+    required String search,
+  }) async {
+    state = const AsyncLoading<StockData>().copyWithPrevious(state);
+
+    state = await AsyncValue.guard(() async {
+      final res = await ref
+          .read(stockRepositoryProvider)
+          .getStocks(pageNumber: page, search: search);
+
+      final List<StockItem> list = [
+        ...state.requireValue.resultSet.toList(),
+        ...res.resultSet,
+      ];
+
+      final stock = StockData(resultSet: list, paging: res.paging);
+
+      return stock;
+    });
   }
 }

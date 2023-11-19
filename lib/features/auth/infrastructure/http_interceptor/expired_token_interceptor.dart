@@ -20,9 +20,11 @@ class ExpiredTokenInterceptor extends RetryPolicy {
   @override
   Future<bool> shouldAttemptRetryOnException(
       Exception reason, BaseRequest request) {
+    // debugger();
+
     log('response.statusCode shouldAttemptRetryOnException reason.runtimeType ${reason.runtimeType}');
 
-    if (reason.runtimeType is ClientException) {
+    if (reason.runtimeType == ClientException) {
       return Future.value(true);
     }
 
@@ -34,6 +36,9 @@ class ExpiredTokenInterceptor extends RetryPolicy {
     log('response.statusCode shouldAttemptRetryOnResponse ${response.statusCode}');
 
     if (response.statusCode == 401) {
+      log('response shouldAttemptRetryOnResponse  401 $response');
+
+      // debugger();
       final token = await repository.getSignedInCredentials();
 
       // If a 401 response is received, refresh the access token with refreshToken

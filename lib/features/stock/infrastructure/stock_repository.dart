@@ -1,6 +1,6 @@
 // ignore_for_file: strict_raw_type
 
-import '../application/stock.dart';
+import '../application/stock_data.dart';
 import 'stock_remote_service.dart';
 
 class StockRepository {
@@ -8,7 +8,7 @@ class StockRepository {
 
   final StockRemoteService _remoteService;
 
-  Future<List<StockItem>> getStocks({
+  Future<StockData> getStocks({
     required int pageNumber,
     required String search,
   }) =>
