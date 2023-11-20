@@ -59,7 +59,7 @@ class RouterNotifier extends ChangeNotifier {
       GoRoute(
         name: RouteNames.homeNameRoute,
         path: RouteNames.homeRoute,
-        builder: (context, state) => const StockScreen(),
+        builder: (context, state) => const StockContent(),
         routes: [
           GoRoute(
               name: RouteNames.versionlNameRoute,
