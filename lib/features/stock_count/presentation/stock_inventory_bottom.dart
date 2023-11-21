@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -49,11 +50,13 @@ class _StockInventoryBottomScreenState
 
     final stockInventoriesAsync = ref.watch(stockInventoryNotifierProvider);
 
-    return AsyncValueWidget<List<StockInventory>>(
-      value: stockInventoriesAsync,
-      data: (stockInventories) => StockInventoryBottomSheet(
-        itemSku: widget.itemSku,
-        stockInventories: stockInventories,
+    return KeyboardDismissOnTap(
+      child: AsyncValueWidget<List<StockInventory>>(
+        value: stockInventoriesAsync,
+        data: (stockInventories) => StockInventoryBottomSheet(
+          itemSku: widget.itemSku,
+          stockInventories: stockInventories,
+        ),
       ),
     );
   }
@@ -70,10 +73,7 @@ class StockInventoryBottomSheet extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue>(updateStockInventorControllerProvider, (_, state) {
       if (!state.isLoading && state.hasValue && state.value != null) {
-        return AlertHelper.showSnackBar(context,
-            color: Palette.primaryColor,
-            message: 'Sukses Mengubah Inventory ',
-            onDone: () => context.canPop() ? context.pop(true) : null);
+        context.canPop() ? context.pop(true) : null;
       } else {
         return state.showAlertDialogOnError(context);
       }
@@ -88,29 +88,10 @@ class StockInventoryBottomSheet extends HookConsumerWidget {
 
     return AsyncValueWidget<void>(
       value: updateStockInventoryAsync,
-      data: (_) => Scaffold(
-        backgroundColor: Colors.transparent,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: VButton(
-          onPressed: () => ref
-              .read(updateStockInventorControllerProvider.notifier)
-              .adjustStockInventoryBySku(
-                  itemSku: itemSku,
-                  updateStockInventory: UpdateStockInventory(
-                    locationId:
-                        stockInventories.map((e) => e.locationId).toList(),
-                    stockCountBefore:
-                        stockInventories.map((e) => e.stockCount).toList(),
-                    stockCountAfter: [
-                      ...inventoryControllers
-                          .map((e) => e.text.isEmpty ? 0 : int.parse(e.text))
-                          .toList()
-                    ],
-                  )),
-          label: 'Adjust Stock Count',
-        ),
-        body: Center(
-          child: Container(
+      data: (_) => SizedBox(
+        height: stockInventories.length * 70 + 50,
+        child: Scaffold(
+          body: Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -123,39 +104,63 @@ class StockInventoryBottomSheet extends HookConsumerWidget {
                     ),
                 itemBuilder: (context, index) {
                   if (index == stockInventories.length) {
-                    return Container();
+                    return VButton(
+                      onPressed: () => ref
+                          .read(updateStockInventorControllerProvider.notifier)
+                          .adjustStockInventoryBySku(
+                              itemSku: itemSku,
+                              updateStockInventory: UpdateStockInventory(
+                                locationId: stockInventories
+                                    .map((e) => e.locationId)
+                                    .toList(),
+                                stockCountBefore: stockInventories
+                                    .map((e) => e.stockCount)
+                                    .toList(),
+                                stockCountAfter: [
+                                  ...inventoryControllers
+                                      .map((e) => e.text.isEmpty
+                                          ? 0
+                                          : int.parse(e.text))
+                                      .toList()
+                                ],
+                              )),
+                      label: 'Adjust Stock Count',
+                    );
                   } else {
-                    return Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Palette.secondaryColor,
-                            borderRadius: BorderRadius.circular(4),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Palette.secondaryColor,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: Text(
+                              stockInventories[index].warehouseCode,
+                              style: Themes.custom(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
+                            ),
                           ),
-                          padding: const EdgeInsets.all(4),
-                          child: Text(
-                            stockInventories[index].warehouseCode,
-                            style: Themes.custom(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal),
+                          const SizedBox(
+                            width: 8,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        SizedBox(
-                            height: 50,
-                            width: 25,
-                            child: TextFormField(
-                              cursorHeight: 1,
-                              // decoration: Themes.formStyle(),
-                              controller: inventoryControllers[index],
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) =>
-                                  inventoryControllers[index].text = value,
-                            ))
-                      ],
+                          SizedBox(
+                              height: 50,
+                              width: 25,
+                              child: TextFormField(
+                                cursorHeight: 1,
+                                // decoration: Themes.formStyle(),
+                                controller: inventoryControllers[index],
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) =>
+                                    inventoryControllers[index].text = value,
+                              ))
+                        ],
+                      ),
                     );
                   }
                 }),

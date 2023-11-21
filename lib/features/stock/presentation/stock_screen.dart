@@ -1,3 +1,5 @@
+// ignore_for_file: strict_raw_type
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -7,6 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../common/error_message_widget.dart';
 import '../../../constants/assets.dart';
 import '../../../style/style.dart';
+import '../../core/presentation/widgets/alert_helper.dart';
+import '../../stock_count/application/stock_inventory_notifier.dart';
 import '../application/stock_notifier.dart';
 import 'stock_item.dart';
 
@@ -15,6 +19,13 @@ class StockContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue>(updateStockInventorControllerProvider, (_, state) {
+      if (!state.isLoading && state.hasValue && state.value != null) {
+        return AlertHelper.showSnackBar(context,
+            color: Palette.primaryColor, message: 'Sukses Mengubah Inventory ');
+      }
+    });
+
     final stocks = ref.watch(stockNotifierProvider);
 
     final searchPage = ref.watch(searchPageProvider);

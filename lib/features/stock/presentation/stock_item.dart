@@ -75,34 +75,32 @@ class StockItemWidget extends ConsumerWidget {
                     ),
                   ],
                   const Spacer(),
-                  if (val.inStock!.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: InkWell(
-                        onTap: () => showModalBottomSheet<bool>(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          backgroundColor: Colors.white,
-                          context: context,
-                          builder: (context) =>
-                              StockInventoryBottomScreen(itemSku: val.itemSku),
-                        ).whenComplete(
-                            () => ref.refresh(stockNotifierProvider)),
-                        child: Ink(
-                          padding: EdgeInsets.zero,
-                          child: const Icon(
-                            Icons.mode,
-                            size: 20,
-                            color: Colors.white,
-                          ),
+                  Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: InkWell(
+                      onTap: () => showModalBottomSheet<bool>(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        backgroundColor: Colors.white,
+                        context: context,
+                        builder: (context) =>
+                            StockInventoryBottomScreen(itemSku: val.itemSku),
+                      ).whenComplete(() => ref.refresh(stockNotifierProvider)),
+                      child: Ink(
+                        padding: EdgeInsets.zero,
+                        child: const Icon(
+                          Icons.mode,
+                          size: 20,
+                          color: Colors.white,
                         ),
                       ),
                     ),
+                  ),
                 ],
               )
             ],
