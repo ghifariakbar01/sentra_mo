@@ -9,7 +9,7 @@ class Palette {
 
   static const primaryLightColor = Color(0xff6debff);
 
-  static const secondaryColor = Color(0xff00d787);
+  static const secondaryColor = Color(0xff3adb76);
   static const secondaryDarkColor = Color(0xff00a459);
   static const secondaryLightColor = Color(0xff62ffb7);
 
@@ -23,4 +23,7 @@ class Palette {
   static const coralRed = Color(0xffff4242);
   static const red = Color(0XFFba2900);
   static const polar = Color(0xffeffbf9);
+
+  static const grey = Color(0xffAAAAAA);
+  static const greyDisabled = Color(0xffE5E5E5);
 }

@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import '../../../../style/style.dart';
 
 class AlertHelper {
-  static void showSnackBar(BuildContext context, {required String message}) {
+  static void showSnackBar(BuildContext context,
+      {required String message, Color? color, Function? onDone}) {
     HapticFeedback.vibrate().then((_) => showFlash(
           context: context,
           persistent: true,
@@ -14,12 +15,12 @@ class AlertHelper {
           builder: (context, controller) {
             return FlashBar(
               controller: controller,
-              backgroundColor: Palette.red,
+              backgroundColor: color ?? Palette.red,
               contentTextStyle: Themes.custom(),
               behavior: FlashBehavior.floating,
               content: Text(message),
             );
           },
-        ));
+        ).then((_) => onDone));
   }
 }

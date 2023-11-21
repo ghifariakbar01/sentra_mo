@@ -29,11 +29,12 @@ class StockContent extends HookConsumerWidget {
         onRefresh: () {
           ref.read(searchFocusProvider).unfocus();
           ref.read(searchPageProvider.notifier).state = 1;
-          ref.read(searchControllerProvider.notifier).state.text = 'Shimizu';
+          ref.read(searchControllerProvider.notifier).state.text =
+              searchController.text;
           //
           ref
               .read(stockNotifierProvider.notifier)
-              .searchStocks(search: 'Shimizu');
+              .searchStocks(search: searchController.text);
           return Future.value();
         },
         child: Scaffold(
@@ -46,6 +47,7 @@ class StockContent extends HookConsumerWidget {
                       focusNode: searchFocus,
                       controller: searchController,
                       style: const TextStyle(color: Palette.primaryColor),
+                      onTap: () => searchController.text = '',
                       onChanged: (value) {
                         if (value.isEmpty) return;
 
@@ -116,8 +118,14 @@ class StockContent extends HookConsumerWidget {
                       ? Center(
                           child: InkWell(
                             onTap: () {
+                              ref
+                                  .read(searchControllerProvider.notifier)
+                                  .state
+                                  .text = '';
+
                               ref.read(isSearchingProvider.notifier).state =
                                   !isSearching;
+
                               searchFocus.requestFocus();
                             },
                             child: Ink(

@@ -21,7 +21,7 @@ final searchPageProvider = StateProvider<int>((ref) {
 });
 
 final searchControllerProvider = StateProvider<TextEditingController>((ref) {
-  return TextEditingController(text: 'Shimizu');
+  return TextEditingController(text: '');
 });
 
 final searchFocusProvider = StateProvider<FocusNode>((ref) {
@@ -48,9 +48,11 @@ class StockNotifier extends _$StockNotifier {
 
   @override
   FutureOr<StockData> build() async {
+    final text = ref.read(searchControllerProvider);
+
     return ref
         .read(stockRepositoryProvider)
-        .getStocks(pageNumber: 1, search: 'Shimizu');
+        .getStocks(pageNumber: 1, search: text.text);
   }
 
   Future<void> searchStocks({
