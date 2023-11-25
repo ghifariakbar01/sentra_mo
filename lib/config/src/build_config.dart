@@ -31,7 +31,7 @@ class BuildConfig {
 
   const BuildConfig._release()
       : this._(
-          baseUrl: 'https://dev.sentrateknik.com/sentra-mo/',
+          baseUrl: 'https://st2.sentrateknik.com/sentra-mo/',
           socketUrl: '',
           connectTimeout: 20000,
           receiveTimeout: 20000,

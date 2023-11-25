@@ -86,11 +86,26 @@ class StockContent extends HookConsumerWidget {
                           .read(isSearchingProvider.notifier)
                           .state = !isSearching,
                       decoration: InputDecoration(
-                        hintText: 'Search . . .',
-                        fillColor: Theme.of(context).colorScheme.tertiary,
-                        hintStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary),
-                      ),
+                          hintText: 'Search . . .',
+                          fillColor: Theme.of(context).colorScheme.tertiary,
+                          hintStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary),
+                          // suffix: Container(
+                          //   height: 5,
+                          //   child: const Icon(Icons.clear),
+                          // ),miz
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                ref
+                                    .read(searchControllerProvider.notifier)
+                                    .state
+                                    .text = '';
+
+                                ref
+                                    .read(stockNotifierProvider.notifier)
+                                    .searchStocks(search: '');
+                              },
+                              child: const Icon(Icons.clear))),
                     )
                   : const Text(
                       'Sentra Mobile',

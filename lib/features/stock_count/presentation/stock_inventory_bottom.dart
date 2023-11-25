@@ -103,13 +103,11 @@ class _StockInventoryBottomSheetState
       data: (_) => Padding(
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Container(
-          height: widget.stockInventories.length * 70 + 50,
+        child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: Theme.of(context).colorScheme.primaryContainer,
           ),
-          padding: const EdgeInsets.all(4),
           child: ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
               itemCount: widget.stockInventories.length + 1,
@@ -143,7 +141,8 @@ class _StockInventoryBottomSheetState
                   );
                 } else {
                   return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: Container(
                         decoration: BoxDecoration(
                             color: Palette.green,

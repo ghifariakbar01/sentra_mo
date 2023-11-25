@@ -106,6 +106,8 @@ class StockItemWidget extends ConsumerWidget {
                     onTap: () async {
                       ref.refresh(updateStockInventorControllerProvider);
                       await showModalBottomSheet<bool>(
+                        useSafeArea: true,
+                        isScrollControlled: true,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
