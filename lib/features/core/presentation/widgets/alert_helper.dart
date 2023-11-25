@@ -15,10 +15,12 @@ class AlertHelper {
           builder: (context, controller) {
             return FlashBar(
               controller: controller,
-              backgroundColor: color ?? Palette.red,
-              contentTextStyle: Themes.custom(),
+              backgroundColor: color ?? Colors.red,
               behavior: FlashBehavior.floating,
-              content: Text(message),
+              content: Text(
+                message,
+                style: const TextStyle(color: Colors.white),
+              ),
             );
           },
         ).then((_) => onDone));

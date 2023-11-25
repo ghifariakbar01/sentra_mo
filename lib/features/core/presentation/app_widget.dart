@@ -38,7 +38,6 @@ class AppWidget extends HookConsumerWidget {
       title: Strings.appName,
       theme: Themes.lightTheme(context),
       darkTheme: Themes.darkTheme(context),
-      themeMode: ThemeMode.light,
     );
   }
 }

@@ -1,4 +1,4 @@
-# Sentra Teknik Mobile
+# Sentra Mobile
 
 ## Requirements
 

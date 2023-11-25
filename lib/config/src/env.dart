@@ -21,7 +21,7 @@ abstract class Env {
 
       HttpOverrides.global = MyHttpOverrides();
 
-      Themes.initUiOverlayStyle();
+      Themes.initUiOverlayStyle(ThemeMode.system);
 
       usePathUrlStrategy();
 

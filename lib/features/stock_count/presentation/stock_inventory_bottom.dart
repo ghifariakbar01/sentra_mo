@@ -1,8 +1,5 @@
 // ignore_for_file: strict_raw_type
 
-import 'dart:developer';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -13,7 +10,6 @@ import '../../../common/async_value_ui.dart';
 import '../../../common/v_async_widget.dart';
 import '../../../common/v_button.dart';
 import '../../../style/style.dart';
-import '../../core/presentation/widgets/alert_helper.dart';
 import '../application/stock_inventory.dart';
 import '../application/stock_inventory_notifier.dart';
 import '../application/update_stock_inventory.dart';
@@ -54,23 +50,39 @@ class _StockInventoryBottomScreenState
       child: AsyncValueWidget<List<StockInventory>>(
         value: stockInventoriesAsync,
         data: (stockInventories) => StockInventoryBottomSheet(
-          itemSku: widget.itemSku,
-          stockInventories: stockInventories,
+          widget.itemSku,
+          stockInventories,
         ),
       ),
     );
   }
 }
 
-class StockInventoryBottomSheet extends HookConsumerWidget {
-  const StockInventoryBottomSheet(
-      {super.key, required this.itemSku, required this.stockInventories});
+class StockInventoryBottomSheet extends StatefulHookConsumerWidget {
+  const StockInventoryBottomSheet(this.itemSku, this.stockInventories,
+      {super.key});
 
   final String itemSku;
   final List<StockInventory> stockInventories;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _StockInventoryBottomSheetState();
+}
+
+class _StockInventoryBottomSheetState
+    extends ConsumerState<StockInventoryBottomSheet> {
+  _StockInventoryBottomSheetState();
+  final FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.listen<AsyncValue>(updateStockInventorControllerProvider, (_, state) {
       if (!state.isLoading && state.hasValue && state.value != null) {
         context.canPop() ? context.pop(true) : null;
@@ -79,7 +91,7 @@ class StockInventoryBottomSheet extends HookConsumerWidget {
       }
     });
 
-    final inventoryControllers = stockInventories
+    final inventoryControllers = widget.stockInventories
         .map((e) => useTextEditingController(text: e.stockCount.toString()))
         .toList();
 
@@ -88,83 +100,113 @@ class StockInventoryBottomSheet extends HookConsumerWidget {
 
     return AsyncValueWidget<void>(
       value: updateStockInventoryAsync,
-      data: (_) => SizedBox(
-        height: stockInventories.length * 70 + 50,
-        child: Scaffold(
-          body: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.all(4),
-            child: ListView.separated(
-                itemCount: stockInventories.length + 1,
-                separatorBuilder: (context, index) => const SizedBox(
-                      height: 4,
-                    ),
-                itemBuilder: (context, index) {
-                  if (index == stockInventories.length) {
-                    return VButton(
-                      onPressed: () => ref
-                          .read(updateStockInventorControllerProvider.notifier)
-                          .adjustStockInventoryBySku(
-                              itemSku: itemSku,
-                              updateStockInventory: UpdateStockInventory(
-                                locationId: stockInventories
-                                    .map((e) => e.locationId)
-                                    .toList(),
-                                stockCountBefore: stockInventories
-                                    .map((e) => e.stockCount)
-                                    .toList(),
-                                stockCountAfter: [
-                                  ...inventoryControllers
-                                      .map((e) => e.text.isEmpty
-                                          ? 0
-                                          : int.parse(e.text))
-                                      .toList()
-                                ],
-                              )),
-                      label: 'Adjust Stock Count',
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Palette.secondaryColor,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: Text(
-                              stockInventories[index].warehouseCode,
-                              style: Themes.custom(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          SizedBox(
-                              height: 50,
-                              width: 25,
-                              child: TextFormField(
-                                cursorHeight: 1,
-                                // decoration: Themes.formStyle(),
-                                controller: inventoryControllers[index],
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) =>
-                                    inventoryControllers[index].text = value,
-                              ))
-                        ],
-                      ),
-                    );
-                  }
-                }),
+      data: (_) => Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          height: widget.stockInventories.length * 70 + 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Theme.of(context).colorScheme.primaryContainer,
           ),
+          padding: const EdgeInsets.all(4),
+          child: ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: widget.stockInventories.length + 1,
+              separatorBuilder: (context, index) => const SizedBox(
+                    height: 4,
+                  ),
+              itemBuilder: (context, index) {
+                if (index == widget.stockInventories.length) {
+                  return VButton(
+                    color: Palette.primaryColor,
+                    width: MediaQuery.of(context).size.width,
+                    onPressed: () => ref
+                        .read(updateStockInventorControllerProvider.notifier)
+                        .adjustStockInventoryBySku(
+                            itemSku: widget.itemSku,
+                            updateStockInventory: UpdateStockInventory(
+                              locationId: widget.stockInventories
+                                  .map((e) => e.locationId)
+                                  .toList(),
+                              stockCountBefore: widget.stockInventories
+                                  .map((e) => e.stockCount)
+                                  .toList(),
+                              stockCountAfter: [
+                                ...inventoryControllers
+                                    .map((e) =>
+                                        e.text.isEmpty ? 0 : int.parse(e.text))
+                                    .toList()
+                              ],
+                            )),
+                    label: 'Adjust Stock Count',
+                  );
+                } else {
+                  return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Palette.green,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 1.5),
+                                blurRadius: 5,
+                                color: Colors.black.withOpacity(0.3),
+                              ),
+                            ]),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              ' ${widget.stockInventories[index].warehouseCode}',
+                              style: const TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Container(
+                              height: 45,
+                              width: 75,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer,
+                                  borderRadius: BorderRadius.circular(4),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: const Offset(0, 1.5),
+                                      blurRadius: 5,
+                                      color: Colors.black.withOpacity(0.3),
+                                    ),
+                                  ]),
+                              child: Center(
+                                child: TextFormField(
+                                  focusNode: index == 0 ? focusNode : null,
+                                  decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.all(16),
+                                      border: InputBorder.none),
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                  controller: inventoryControllers[index],
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (value) =>
+                                      inventoryControllers[index].text = value,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ));
+                }
+              }),
         ),
       ),
     );

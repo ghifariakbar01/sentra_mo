@@ -13,12 +13,14 @@ class StockItemWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final Color color = Theme.of(context).colorScheme.primaryContainer;
+
     return Padding(
       padding: const EdgeInsets.all(4),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: color,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -33,9 +35,9 @@ class StockItemWidget extends ConsumerWidget {
           children: [
             Text(
               '${val.itemFullName}',
-              style: Themes.custom(
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary,
                   fontSize: 14,
-                  color: Colors.black,
                   fontWeight: FontWeight.normal),
             ),
             const SizedBox(
@@ -43,7 +45,7 @@ class StockItemWidget extends ConsumerWidget {
             ),
             Text(
               val.itemSku,
-              style: Themes.custom(
+              style: const TextStyle(
                   fontSize: 12,
                   color: Colors.blue,
                   fontWeight: FontWeight.normal),
@@ -58,16 +60,41 @@ class StockItemWidget extends ConsumerWidget {
                   for (final gudangItem in val.inStock!) ...[
                     Container(
                       decoration: BoxDecoration(
-                        color: Palette.secondaryColor,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      padding: const EdgeInsets.all(4),
-                      child: Text(
-                        '${gudangItem.warehouseCode}:${gudangItem.stockCount}',
-                        style: Themes.custom(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal),
+                          color: Palette.green,
+                          borderRadius: BorderRadius.circular(4),
+                          boxShadow: [
+                            BoxShadow(
+                              offset: const Offset(0, 1.5),
+                              blurRadius: 5,
+                              color: Colors.black.withOpacity(0.3),
+                            ),
+                          ]),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 2, vertical: 2),
+                      child: Row(
+                        children: [
+                          Text(
+                            ' ${gudangItem.warehouseCode}',
+                            style: const TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.normal),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Palette.greyDisabled,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Text(
+                              '${gudangItem.stockCount}',
+                              style: const TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(
@@ -75,32 +102,40 @@ class StockItemWidget extends ConsumerWidget {
                     ),
                   ],
                   const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: InkWell(
-                      onTap: () => showModalBottomSheet<bool>(
+                  InkWell(
+                    onTap: () async {
+                      ref.refresh(updateStockInventorControllerProvider);
+                      await showModalBottomSheet<bool>(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        backgroundColor: Colors.white,
                         context: context,
                         builder: (context) =>
                             StockInventoryBottomScreen(itemSku: val.itemSku),
-                      ).whenComplete(() => ref.refresh(stockNotifierProvider)),
+                      ).whenComplete(() => ref.refresh(stockNotifierProvider));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Palette.primaryColor.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(0, 1),
+                            blurRadius: 5,
+                            color: Colors.black.withOpacity(0.3),
+                          ),
+                        ],
+                      ),
                       child: Ink(
-                        padding: EdgeInsets.zero,
                         child: const Icon(
                           Icons.mode,
-                          size: 20,
+                          size: 11,
                           color: Colors.white,
                         ),
                       ),
                     ),
-                  ),
+                  )
                 ],
               )
             ],

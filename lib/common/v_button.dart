@@ -7,6 +7,7 @@ class VButton extends StatelessWidget {
     super.key,
     this.isEnabled,
     this.color,
+    this.width,
     this.height,
     this.textAlign,
     this.fontSize,
@@ -17,6 +18,7 @@ class VButton extends StatelessWidget {
 
   final String label;
   final Color? color;
+  final double? width;
   final double? height;
   final bool? isEnabled;
   final double? fontSize;
@@ -31,14 +33,21 @@ class VButton extends StatelessWidget {
             onPressed: onPressed,
             child: Container(
               height: height ?? 50,
-              width: 200,
+              width: width ?? 200,
               decoration: BoxDecoration(
                   color: color ?? Palette.primaryColor,
-                  borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, 1.5),
+                      blurRadius: 5,
+                      color: Colors.black.withOpacity(0.3),
+                    )
+                  ]),
               child: Center(
                 child: Text(label,
                     style: textStyle ??
-                        Themes.custom(
+                        TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: fontSize ?? 12,
@@ -51,7 +60,7 @@ class VButton extends StatelessWidget {
             onPressed: () {},
             child: Container(
                 height: height ?? 50,
-                width: 200,
+                width: width ?? 200,
                 decoration: BoxDecoration(
                     color: Palette.greyDisabled,
                     borderRadius: BorderRadius.circular(10)),
@@ -59,8 +68,8 @@ class VButton extends StatelessWidget {
                   child: Text(
                     label,
                     style: textStyle ??
-                        Themes.custom(
-                          color: Palette.grey,
+                        TextStyle(
+                          color: Palette.greyDisabled,
                           fontWeight: FontWeight.bold,
                           fontSize: fontSize ?? 12,
                         ),

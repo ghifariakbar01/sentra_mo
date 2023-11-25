@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../style/style.dart';
@@ -21,7 +22,11 @@ class SignInForm extends HookConsumerWidget {
         children: [
           TextFormField(
             key: const Key('userID'),
-            decoration: Themes.formStyle(hint: 'User ID'),
+            decoration: Themes.formStyle('User ID',
+                color: Theme.of(context).colorScheme.tertiary,
+                icon: const Icon(Icons.person)),
+            style: Themes.greyHint(FontWeight.normal, 14,
+                color: Theme.of(context).colorScheme.tertiary),
             keyboardType: TextInputType.emailAddress,
             onChanged: (value) => ref
                 .read(signInFormNotifierProvider.notifier)
@@ -38,8 +43,15 @@ class SignInForm extends HookConsumerWidget {
           ),
           const SizedBox(height: 8),
           TextFormField(
-            decoration: Themes.formStyle(
-                hint: 'Password', icon: const Icon(Icons.lock)),
+            // style: TextStyle(
+            //     color: Theme.of(context).colorScheme.tertiary,
+            //     fontSize: 14,
+            //     fontWeight: FontWeight.normal),
+            decoration: Themes.formStyle('Password',
+                color: Theme.of(context).colorScheme.tertiary,
+                icon: const Icon(Icons.lock)),
+            style: Themes.greyHint(FontWeight.normal, 14,
+                color: Theme.of(context).colorScheme.tertiary),
             obscureText: true,
             onChanged: (value) => ref
                 .read(signInFormNotifierProvider.notifier)

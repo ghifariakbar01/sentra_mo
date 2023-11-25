@@ -367,7 +367,7 @@
 			baseConfigurationReference = B999AB6D15EC58A449327736 /* Pods-Runner.profile-development.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = development;
-				APP_NAME = "Sentra Teknik Mobile";
+				APP_NAME = "Sentra Mobile";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -452,7 +452,7 @@
 			baseConfigurationReference = FDD26E95B61B4D8D55D9CC94 /* Pods-Runner.debug-staging.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = staging;
-				APP_NAME = "Sentra Teknik Mobile";
+				APP_NAME = "Sentra Mobile";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -621,7 +621,7 @@
 			baseConfigurationReference = 6CAF4702FCCF830028F2F3EC /* Pods-Runner.release-staging.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = staging;
-				APP_NAME = "Sentra Teknik Mobile";
+				APP_NAME = "Sentra Mobile";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -783,7 +783,7 @@
 			baseConfigurationReference = 18B9A7840FDAEC647FD297A5 /* Pods-Runner.profile-staging.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = staging;
-				APP_NAME = "Sentra Teknik Mobile";
+				APP_NAME = "Sentra Mobile";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1000,7 +1000,7 @@
 			baseConfigurationReference = 43D198D581670A0B980B49FA /* Pods-Runner.debug-development.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = development;
-				APP_NAME = "Sentra Teknik Mobile";
+				APP_NAME = "Sentra Mobile";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1031,7 +1031,7 @@
 			baseConfigurationReference = D503DF32684FF80437B42F42 /* Pods-Runner.release-development.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = development;
-				APP_NAME = "Sentra Teknik Mobile";
+				APP_NAME = "Sentra Mobile";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;

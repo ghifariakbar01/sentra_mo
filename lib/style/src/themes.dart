@@ -1,71 +1,105 @@
 part of style;
 
 mixin Themes {
-  static void initUiOverlayStyle() {
+  static void initUiOverlayStyle(ThemeMode mode) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Palette.primaryColor,
-      statusBarIconBrightness: Brightness.light,
+      // statusBarColor: mode.index == 0 ? Palette.primaryColor : Colors.black,
+      // statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.black,
-      systemNavigationBarIconBrightness: Brightness.light,
+      // systemNavigationBarIconBrightness: Brightness.light,
     ));
+  }
+
+  static OutlineInputBorder notFocused({
+    required bool isRadius,
+    Color? borderColor,
+  }) {
+    return OutlineInputBorder(
+        borderRadius: isRadius
+            ? const BorderRadius.all(Radius.circular(10))
+            : const BorderRadius.all(Radius.zero),
+        borderSide: BorderSide(color: borderColor ?? Colors.black));
+  }
+
+  static OutlineInputBorder focused() {
+    return const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderSide: BorderSide(color: Palette.primaryColor));
+  }
+
+  static TextStyle greyHint(FontWeight fontWeight, double fontSize,
+      {Color? color}) {
+    return GoogleFonts.lato(
+      color: color ?? Palette.grey,
+      fontWeight: fontWeight,
+      fontSize: fontSize,
+    );
+  }
+
+  static InputDecoration formStyle(String hintText,
+      {Widget? icon, double? hintFontSize, Color? color}) {
+    return InputDecoration(
+      border: InputBorder.none,
+      enabledBorder: Themes.notFocused(isRadius: true, borderColor: color),
+      focusedBorder: Themes.focused(),
+      contentPadding: const EdgeInsets.all(16),
+      hintStyle:
+          Themes.greyHint(FontWeight.normal, color: color, hintFontSize ?? 16),
+      errorBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      errorStyle: const TextStyle(fontSize: 12, color: Colors.red),
+      prefixIcon: icon,
+      hintText: hintText,
+    );
   }
 
   static ThemeData lightTheme(BuildContext context) {
     return ThemeData.light().copyWith(
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: Colors.white,
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      primaryColor: Palette.primaryColor,
       colorScheme: const ColorScheme.light(
+        primaryContainer: Colors.white,
+        secondaryContainer: Palette.primaryColor,
+        tertiaryContainer: Palette.greyDisabled,
         primary: Palette.primaryColor,
-        secondary: Palette.primaryColor,
-        onSecondary: Palette.secondaryTextColor,
+        secondary: Colors.black,
+        tertiary: Colors.black,
       ),
       textTheme: GoogleFonts.latoTextTheme(
         Theme.of(context).textTheme,
       ),
+      appBarTheme: AppBarTheme(
+          titleTextStyle: Themes.greyHint(
+              FontWeight.normal, color: Palette.primaryColor, 20),
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Palette.primaryColor)),
     );
-  }
-
-  static InputDecoration formStyle({String? hint, Icon? icon}) {
-    return InputDecoration(
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        prefixIcon: icon ?? const Icon(Icons.person),
-        labelText: hint,
-        labelStyle: Themes.custom(color: Colors.black, fontSize: 14));
   }
 
   static ThemeData darkTheme(BuildContext context) {
     return ThemeData.dark().copyWith(
+      brightness: Brightness.dark,
+      appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          iconTheme: IconThemeData(color: Colors.white)),
+      scaffoldBackgroundColor: Colors.black,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      colorScheme: const ColorScheme.dark(
-        primary: Palette.primaryColor,
-        secondary: Palette.secondaryColor,
-        onPrimary: Palette.primaryTextColor,
-        onSecondary: Palette.secondaryTextColor,
+      primaryColor: Colors.black,
+      colorScheme: const ColorScheme.light(
+        primaryContainer: Colors.black,
+        secondaryContainer: Colors.black,
+        tertiaryContainer: Colors.black,
+        primary: Colors.white,
+        secondary: Colors.black,
+        tertiary: Colors.white,
       ),
       textTheme: GoogleFonts.latoTextTheme(
         Theme.of(context).textTheme,
       ),
-    );
-  }
-
-  static TextStyle custom(
-      {Color? color, FontWeight? fontWeight, double? fontSize}) {
-    return GoogleFonts.poppins(
-        color: color ?? Colors.white,
-        fontWeight: fontWeight ?? FontWeight.normal,
-        fontSize: fontSize ?? 12);
-  }
-
-  static TextStyle whiteText() {
-    return const TextStyle().copyWith(
-      color: Colors.white,
-    );
-  }
-
-  static TextStyle greenText() {
-    return const TextStyle().copyWith(
-      color: Colors.black,
     );
   }
 }

@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../constants/assets.dart';
-
+import '../../../../common/v_button.dart';
 import '../../../../style/style.dart';
 import '../../shared/providers.dart';
 import 'sign_in_form.dart';
@@ -18,17 +15,27 @@ class SignInScaffold extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final isBlacklist = ref.watch(blacklistNotifierProvider);
     // log('isBlacklist $isBlacklist');
+    final bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return KeyboardDismissOnTap(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Sign In',
-            style: Themes.custom(fontSize: 20),
-          ),
-          elevation: 1,
-        ),
-        backgroundColor: Palette.primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        appBar: !isDarkMode
+            ? AppBar(
+                backgroundColor: Palette.primaryColor,
+                title: const Text('Sign In',
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
+                elevation: 1,
+              )
+            : AppBar(
+                backgroundColor: Colors.black,
+                title: const Text(
+                  'Sign In',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+                elevation: 1,
+              ),
         body: Stack(
           children: [
             // Image.asset()
@@ -38,21 +45,21 @@ class SignInScaffold extends HookConsumerWidget {
                 height: MediaQuery.of(context).size.height / 2,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.white),
+                    color: Theme.of(context).colorScheme.primaryContainer),
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Masuk ke Akun Sentra Teknik',
-                      style: Themes.custom(
+                      style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Palette.primaryColor),
                     ),
-                    Text(
-                      'Cek Inventoris Sentra Teknik dengan Sentra Teknik Mobile !',
-                      style: Themes.custom(
+                    const Text(
+                      'Cek Inventoris Sentra Teknik dengan Sentra Mobile !',
+                      style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.normal,
                           color: Palette.primaryColor),
@@ -60,39 +67,25 @@ class SignInScaffold extends HookConsumerWidget {
                     const SizedBox(height: 24),
                     const SignInForm(),
                     const SizedBox(height: 8),
-                    Container(
-                      height: 50,
+                    VButton(
                       width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: Palette.primaryColor),
-                      padding: const EdgeInsets.all(4),
-                      child: TextButton(
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                          ref
-                              .read(signInFormNotifierProvider.notifier)
-                              .signInWithEmailAndPassword();
-                        },
-                        child: Text(
-                          'Sign In',
-                          style: Themes.custom(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14),
-                        ),
-                      ),
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+                        await ref
+                            .read(signInFormNotifierProvider.notifier)
+                            .signInWithEmailAndPassword();
+                      },
+                      label: 'Sign In',
                     ),
                   ],
                 ),
               ),
             ),
             const Positioned(
-              bottom: 5,
+              bottom: 15,
               left: 0,
               right: 0,
               child: VersioningWidget(
-                color: Palette.secondaryTextColor,
                 fontSize: 10,
                 gitFontSize: 8,
               ),

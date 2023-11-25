@@ -9,6 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../common/error_message_widget.dart';
 import '../../../constants/assets.dart';
 import '../../../style/style.dart';
+import '../../auth/application/sign_out/sign_out_notifier.dart';
+import '../../auth/shared/providers.dart';
 import '../../core/presentation/widgets/alert_helper.dart';
 import '../../stock_count/application/stock_inventory_notifier.dart';
 import '../application/stock_notifier.dart';
@@ -25,6 +27,14 @@ class StockContent extends HookConsumerWidget {
             color: Palette.primaryColor, message: 'Sukses Mengubah Inventory ');
       }
     });
+
+    ref.listen<SignOutState>(
+        signOutNotifierProvider,
+        (__, state) => state.maybeWhen(
+            success: () => ref
+                .read(authNotifierProvider.notifier)
+                .checkAndUpdateAuthStatus(),
+            orElse: () => null));
 
     final stocks = ref.watch(stockNotifierProvider);
 
@@ -50,14 +60,15 @@ class StockContent extends HookConsumerWidget {
         },
         child: Scaffold(
             appBar: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.white,
-              leading: Image.asset(Assets.appLogo),
+              elevation: 1,
+              // backgroundColor: Colors.white,
+              // leading: Image.asset(Assets.appLogo,),
               title: isSearching
                   ? TextField(
                       focusNode: searchFocus,
                       controller: searchController,
-                      style: const TextStyle(color: Palette.primaryColor),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary),
                       onTap: () => searchController.text = '',
                       onChanged: (value) {
                         if (value.isEmpty) return;
@@ -74,15 +85,16 @@ class StockContent extends HookConsumerWidget {
                       onTapOutside: (_) => ref
                           .read(isSearchingProvider.notifier)
                           .state = !isSearching,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Search . . .',
-                        fillColor: Palette.primaryColor,
-                        hintStyle: TextStyle(color: Palette.primaryColor),
+                        fillColor: Theme.of(context).colorScheme.tertiary,
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary),
                       ),
                     )
-                  : Text(
-                      'Sentra Teknik Mobile',
-                      style: Themes.custom(
+                  : const Text(
+                      'Sentra Mobile',
+                      style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Palette.primaryColor),
@@ -98,7 +110,14 @@ class StockContent extends HookConsumerWidget {
                       icon: const Icon(
                         Icons.search,
                         color: Palette.primaryColor,
-                      ))
+                      )),
+                IconButton(
+                    onPressed: () =>
+                        ref.read(signOutNotifierProvider.notifier).signOut(),
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Palette.primaryColor,
+                    ))
               ],
             ),
             body: stocks.when(
@@ -140,10 +159,10 @@ class StockContent extends HookConsumerWidget {
                               searchFocus.requestFocus();
                             },
                             child: Ink(
-                              child: Text(
+                              child: const Text(
                                 'Tidak ada item . . .\n Silahkan mulai pencarian ',
                                 textAlign: TextAlign.center,
-                                style: Themes.custom(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Palette.primaryColor,
                                     fontWeight: FontWeight.bold),

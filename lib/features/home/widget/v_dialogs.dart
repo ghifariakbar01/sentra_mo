@@ -33,16 +33,14 @@ class VAlertDialog extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         title: Text(
           label,
-          style: Themes.custom(
-            color: Colors.white,
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
         ),
         content: Text(
           labelDescription,
-          style: Themes.custom(
-            color: Colors.white,
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
           ),
@@ -52,8 +50,7 @@ class VAlertDialog extends ConsumerWidget {
             onPressed: onPressed,
             child: Text(
               pressedLabel ?? 'YA',
-              style: Themes.custom(
-                color: Colors.white,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
               ),
@@ -63,8 +60,7 @@ class VAlertDialog extends ConsumerWidget {
             onPressed: onBackPressed ?? () => context.pop(),
             child: Text(
               backPressedLabel ?? 'TIDAK',
-              style: Themes.custom(
-                color: Colors.white,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
               ),

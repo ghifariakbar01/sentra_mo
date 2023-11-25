@@ -77,15 +77,15 @@ android {
         development {
             applicationIdSuffix ".dev"
             versionNameSuffix = "-dev"
-            resValue "string", "app_name", "Sentra Teknik Mobile Dev"
+            resValue "string", "app_name", "Sentra Mobile Dev"
         }
         staging {
             applicationIdSuffix ".staging"
             versionNameSuffix = "-staging"
-            resValue "string", "app_name", "Sentra Teknik Mobile Stage"
+            resValue "string", "app_name", "Sentra Mobile Stage"
         }
         production {
-            resValue "string", "app_name", "Sentra Teknik Mobile"
+            resValue "string", "app_name", "Sentra Mobile"
         }
     }
 }
