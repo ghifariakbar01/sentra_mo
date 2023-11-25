@@ -24,7 +24,7 @@ class VButton extends StatelessWidget {
   final double? fontSize;
   final TextAlign? textAlign;
   final TextStyle? textStyle;
-  final Future<void> Function() onPressed;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {

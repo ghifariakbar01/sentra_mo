@@ -116,28 +116,47 @@ class _StockInventoryBottomSheetState
                   ),
               itemBuilder: (context, index) {
                 if (index == widget.stockInventories.length) {
-                  return VButton(
-                    color: Palette.primaryColor,
-                    width: MediaQuery.of(context).size.width,
-                    onPressed: () => ref
-                        .read(updateStockInventorControllerProvider.notifier)
-                        .adjustStockInventoryBySku(
-                            itemSku: widget.itemSku,
-                            updateStockInventory: UpdateStockInventory(
-                              locationId: widget.stockInventories
-                                  .map((e) => e.locationId)
-                                  .toList(),
-                              stockCountBefore: widget.stockInventories
-                                  .map((e) => e.stockCount)
-                                  .toList(),
-                              stockCountAfter: [
-                                ...inventoryControllers
-                                    .map((e) =>
-                                        e.text.isEmpty ? 0 : int.parse(e.text))
-                                    .toList()
-                              ],
-                            )),
-                    label: 'Adjust Stock Count',
+                  return Row(
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: VButton(
+                          color: Colors.red,
+                          width: MediaQuery.of(context).size.width,
+                          onPressed: () =>
+                              context.canPop() ? context.pop() : null,
+                          label: 'Batal',
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: VButton(
+                          color: Palette.primaryColor,
+                          width: MediaQuery.of(context).size.width,
+                          onPressed: () => ref
+                              .read(updateStockInventorControllerProvider
+                                  .notifier)
+                              .adjustStockInventoryBySku(
+                                  itemSku: widget.itemSku,
+                                  updateStockInventory: UpdateStockInventory(
+                                    locationId: widget.stockInventories
+                                        .map((e) => e.locationId)
+                                        .toList(),
+                                    stockCountBefore: widget.stockInventories
+                                        .map((e) => e.stockCount)
+                                        .toList(),
+                                    stockCountAfter: [
+                                      ...inventoryControllers
+                                          .map((e) => e.text.isEmpty
+                                              ? 0
+                                              : int.parse(e.text))
+                                          .toList()
+                                    ],
+                                  )),
+                          label: 'Simpan',
+                        ),
+                      ),
+                    ],
                   );
                 } else {
                   return Padding(
