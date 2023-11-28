@@ -55,6 +55,12 @@ class StockNotifier extends _$StockNotifier {
         .getStocks(pageNumber: 1, search: text.text);
   }
 
+  void emptyStocks() {
+    state = const AsyncLoading();
+
+    state = AsyncValue.data(StockData.initial());
+  }
+
   Future<void> searchStocks({
     required String search,
   }) async {

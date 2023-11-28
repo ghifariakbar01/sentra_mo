@@ -20,6 +20,9 @@ class StockData with _$StockData {
 
   factory StockData.fromJson(Map<String, Object?> json) =>
       _$StockDataFromJson(json);
+
+  factory StockData.initial() =>
+      StockData(resultSet: [], paging: Paging.initial());
 }
 
 class MyResultSetConverter

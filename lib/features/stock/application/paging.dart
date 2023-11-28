@@ -14,4 +14,7 @@ class Paging with _$Paging {
   }) = _Paging;
 
   factory Paging.fromJson(Map<String, Object?> json) => _$PagingFromJson(json);
+
+  factory Paging.initial() =>
+      const Paging(pageNo: '1', pageSize: 1, totalDoc: 0, totalPage: 1);
 }

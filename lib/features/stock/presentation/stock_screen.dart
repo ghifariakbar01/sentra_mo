@@ -69,7 +69,11 @@ class StockContent extends HookConsumerWidget {
                       controller: searchController,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.tertiary),
-                      onTap: () => searchController.text = '',
+                      onTap: () {
+                        searchController.text = '';
+
+                        ref.read(stockNotifierProvider.notifier).emptyStocks();
+                      },
                       onChanged: (value) {
                         if (value.isEmpty) return;
 
@@ -103,7 +107,7 @@ class StockContent extends HookConsumerWidget {
 
                                 ref
                                     .read(stockNotifierProvider.notifier)
-                                    .searchStocks(search: '');
+                                    .emptyStocks();
                               },
                               child: const Icon(Icons.clear))),
                     )
@@ -167,6 +171,10 @@ class StockContent extends HookConsumerWidget {
                                   .read(searchControllerProvider.notifier)
                                   .state
                                   .text = '';
+
+                              ref
+                                  .read(stockNotifierProvider.notifier)
+                                  .emptyStocks();
 
                               ref.read(isSearchingProvider.notifier).state =
                                   !isSearching;
