@@ -50,6 +50,10 @@ class StockNotifier extends _$StockNotifier {
   FutureOr<StockData> build() async {
     final text = ref.read(searchControllerProvider);
 
+    if (text.text.isEmpty) {
+      return StockData.initial();
+    }
+
     return ref
         .read(stockRepositoryProvider)
         .getStocks(pageNumber: 1, search: text.text);

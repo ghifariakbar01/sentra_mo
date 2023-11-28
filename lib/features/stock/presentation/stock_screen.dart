@@ -1,13 +1,16 @@
 // ignore_for_file: strict_raw_type
 
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../common/error_message_widget.dart';
-import '../../../constants/assets.dart';
 import '../../../style/style.dart';
 import '../../auth/application/sign_out/sign_out_notifier.dart';
 import '../../auth/shared/providers.dart';
@@ -38,10 +41,33 @@ class StockContent extends HookConsumerWidget {
 
     final stocks = ref.watch(stockNotifierProvider);
 
-    final searchPage = ref.watch(searchPageProvider);
+    final timerTick = useState(2);
+    final justSearched = useState(false);
     final isSearching = ref.watch(isSearchingProvider);
     final searchFocus = ref.watch(searchFocusProvider);
-    final searchController = ref.watch(searchControllerProvider);
+    final searchController = useTextEditingController(text: '');
+
+    log('timerTick ${timerTick.value}');
+
+    useEffect(
+      () {
+        Timer.periodic(const Duration(seconds: 1), (timer) async {
+          timerTick.value--;
+          if (timerTick.value == 0) {
+            if (justSearched.value && searchController.value.text.isNotEmpty) {
+              await ref
+                  .read(stockNotifierProvider.notifier)
+                  .searchStocks(search: searchController.value.text);
+
+              justSearched.value = false;
+            }
+
+            timerTick.value = 2;
+          }
+        });
+      },
+      [justSearched],
+    );
 
     final controller = useScrollController();
 
@@ -75,16 +101,16 @@ class StockContent extends HookConsumerWidget {
                         ref.read(stockNotifierProvider.notifier).emptyStocks();
                       },
                       onChanged: (value) {
-                        if (value.isEmpty) return;
-
-                        ref.read(searchPageProvider.notifier).state = 1;
-
-                        ref
-                            .read(stockNotifierProvider.notifier)
-                            .searchStocks(search: value);
+                        if (ref.read(searchPageProvider.notifier).state != 1) {
+                          ref.read(searchPageProvider.notifier).state = 1;
+                        }
 
                         ref.read(searchControllerProvider.notifier).state.text =
                             value;
+
+                        justSearched.value = true;
+
+                        log('called here 3 ${justSearched.value}');
                       },
                       onTapOutside: (_) => ref
                           .read(isSearchingProvider.notifier)
@@ -104,6 +130,8 @@ class StockContent extends HookConsumerWidget {
                                     .read(searchControllerProvider.notifier)
                                     .state
                                     .text = '';
+
+                                searchController.text = '';
 
                                 ref
                                     .read(stockNotifierProvider.notifier)
