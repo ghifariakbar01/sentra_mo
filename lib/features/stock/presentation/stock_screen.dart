@@ -105,12 +105,24 @@ class StockContent extends HookConsumerWidget {
                           ref.read(searchPageProvider.notifier).state = 1;
                         }
 
-                        ref.read(searchControllerProvider.notifier).state.text =
-                            value;
+                        // Backspace
+                        if (value.length <
+                            ref.read(searchControllerProvider).text.length) {
+                          ref
+                              .read(searchControllerProvider.notifier)
+                              .state
+                              .text = value;
 
-                        justSearched.value = true;
+                          justSearched.value = false;
+                          //
+                        } else {
+                          ref
+                              .read(searchControllerProvider.notifier)
+                              .state
+                              .text = value;
 
-                        log('called here 3 ${justSearched.value}');
+                          justSearched.value = true;
+                        }
                       },
                       onTapOutside: (_) => ref
                           .read(isSearchingProvider.notifier)
