@@ -20,8 +20,8 @@ final searchPageProvider = StateProvider<int>((ref) {
   return 1;
 });
 
-final searchControllerProvider = StateProvider<TextEditingController>((ref) {
-  return TextEditingController(text: '');
+final lastSearchedProvider = StateProvider<String>((ref) {
+  return '';
 });
 
 final searchFocusProvider = StateProvider<FocusNode>((ref) {
@@ -48,15 +48,15 @@ class StockNotifier extends _$StockNotifier {
 
   @override
   FutureOr<StockData> build() async {
-    final text = ref.read(searchControllerProvider);
+    final text = ref.read(lastSearchedProvider);
 
-    if (text.text.isEmpty) {
+    if (text.isEmpty) {
       return StockData.initial();
     }
 
     return ref
         .read(stockRepositoryProvider)
-        .getStocks(pageNumber: 1, search: text.text);
+        .getStocks(pageNumber: 1, search: text);
   }
 
   void emptyStocks() {

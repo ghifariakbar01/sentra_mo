@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../style/style.dart';
+import '../../home/widget/v_dialogs.dart';
 import '../../stock_count/application/stock_inventory_notifier.dart';
 import '../../stock_count/presentation/stock_inventory_bottom.dart';
 import '../application/stock.dart';
@@ -100,6 +103,31 @@ class StockItemWidget extends ConsumerWidget {
                     const SizedBox(
                       width: 8,
                     ),
+                  ],
+                  if (val.urlPriceList != null) ...[
+                    InkWell(
+                        onTap: () async => await canLaunchUrl(
+                                Uri.parse('https://${val.urlPriceList!}'))
+                            ? launchUrl(
+                                Uri.parse('https://${val.urlPriceList!}'),
+                                mode: LaunchMode.externalApplication)
+                            // ignore: use_build_context_synchronously
+                            : showVAlertDialog(
+                                label: 'Error',
+                                labelDescription: 'Url tidak bisa dibuka',
+                                onPressed: () {
+                                  context.pop();
+                                  return Future.value(true);
+                                },
+                                pressedLabel: 'OK',
+                                backPressedLabel: '',
+                                context: context,
+                              ),
+                        child: Ink(
+                            child: const Icon(
+                          Icons.launch,
+                          color: Colors.white,
+                        ))),
                   ],
                   const Spacer(),
                   InkWell(

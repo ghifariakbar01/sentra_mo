@@ -9,6 +9,7 @@ class StockItem with _$StockItem {
   const factory StockItem({
     @JsonKey(name: 'item_sku') required String itemSku,
     @JsonKey(name: 'item_full_name') required String? itemFullName,
+    @JsonKey(name: 'url_pricelist') required String? urlPriceList,
     @JsonKey(name: 'in_stock')
     @JsonSerializable(converters: [MyResponseConverter()])
     required List<InStock>? inStock,

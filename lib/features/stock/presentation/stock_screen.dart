@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
@@ -18,6 +17,8 @@ import '../../core/presentation/widgets/alert_helper.dart';
 import '../../stock_count/application/stock_inventory_notifier.dart';
 import '../application/stock_notifier.dart';
 import 'stock_item.dart';
+
+final _whitespaceRE = RegExp(r'\s+');
 
 class StockContent extends HookConsumerWidget {
   const StockContent({super.key});
@@ -41,7 +42,7 @@ class StockContent extends HookConsumerWidget {
 
     final stocks = ref.watch(stockNotifierProvider);
 
-    final timerTick = useState(2);
+    final timerTick = useState(1);
     final justSearched = useState(false);
     final isSearching = ref.watch(isSearchingProvider);
     final searchFocus = ref.watch(searchFocusProvider);
@@ -51,13 +52,23 @@ class StockContent extends HookConsumerWidget {
 
     useEffect(
       () {
-        Timer.periodic(const Duration(seconds: 1), (timer) async {
+        Timer.periodic(const Duration(milliseconds: 750), (timer) async {
           timerTick.value--;
           if (timerTick.value == 0) {
-            if (justSearched.value && searchController.value.text.isNotEmpty) {
+            final String searchTrimmed = searchController.value.text
+                .trimLeft()
+                .trimRight()
+                .replaceAll(_whitespaceRE, ' ');
+
+            if (justSearched.value &&
+                searchController.value.text.isNotEmpty &&
+                searchTrimmed !=
+                    ref.read(lastSearchedProvider.notifier).state) {
               await ref
                   .read(stockNotifierProvider.notifier)
-                  .searchStocks(search: searchController.value.text);
+                  .searchStocks(search: searchTrimmed);
+
+              ref.read(lastSearchedProvider.notifier).state = searchTrimmed;
 
               justSearched.value = false;
             }
@@ -76,8 +87,7 @@ class StockContent extends HookConsumerWidget {
         onRefresh: () {
           ref.read(searchFocusProvider).unfocus();
           ref.read(searchPageProvider.notifier).state = 1;
-          ref.read(searchControllerProvider.notifier).state.text =
-              searchController.text;
+          ref.read(lastSearchedProvider.notifier).state = searchController.text;
           //
           ref
               .read(stockNotifierProvider.notifier)
@@ -96,32 +106,22 @@ class StockContent extends HookConsumerWidget {
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.tertiary),
                       onTap: () {
+                        justSearched.value = false;
                         searchController.text = '';
-
                         ref.read(stockNotifierProvider.notifier).emptyStocks();
+                        ref.read(lastSearchedProvider.notifier).state = '';
                       },
                       onChanged: (value) {
                         if (ref.read(searchPageProvider.notifier).state != 1) {
                           ref.read(searchPageProvider.notifier).state = 1;
                         }
 
-                        // Backspace
-                        if (value.length <
-                            ref.read(searchControllerProvider).text.length) {
-                          ref
-                              .read(searchControllerProvider.notifier)
-                              .state
-                              .text = value;
-
-                          justSearched.value = false;
-                          //
-                        } else {
-                          ref
-                              .read(searchControllerProvider.notifier)
-                              .state
-                              .text = value;
+                        if (value.isNotEmpty) {
+                          timerTick.value = 2;
 
                           justSearched.value = true;
+                        } else {
+                          justSearched.value = false;
                         }
                       },
                       onTapOutside: (_) => ref
@@ -138,10 +138,8 @@ class StockContent extends HookConsumerWidget {
                           // ),miz
                           suffixIcon: InkWell(
                               onTap: () {
-                                ref
-                                    .read(searchControllerProvider.notifier)
-                                    .state
-                                    .text = '';
+                                ref.read(lastSearchedProvider.notifier).state =
+                                    '';
 
                                 searchController.text = '';
 
@@ -207,10 +205,8 @@ class StockContent extends HookConsumerWidget {
                       ? Center(
                           child: InkWell(
                             onTap: () {
-                              ref
-                                  .read(searchControllerProvider.notifier)
-                                  .state
-                                  .text = '';
+                              ref.read(lastSearchedProvider.notifier).state =
+                                  '';
 
                               ref
                                   .read(stockNotifierProvider.notifier)

@@ -4,6 +4,27 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../style/style.dart';
 
+Future<void> showVAlertDialog({
+  required String label,
+  required BuildContext context,
+  required String labelDescription,
+  required Future<void> Function() onPressed,
+  //
+  final String? pressedLabel,
+  final String? backPressedLabel,
+}) async {
+  return showDialog(
+    context: context,
+    builder: (_) => VAlertDialog(
+      label: label,
+      onPressed: onPressed,
+      pressedLabel: pressedLabel,
+      backPressedLabel: backPressedLabel,
+      labelDescription: labelDescription,
+    ),
+  );
+}
+
 class VAlertDialog extends ConsumerWidget {
   const VAlertDialog({
     super.key,
